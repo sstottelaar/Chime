@@ -1,0 +1,45 @@
+﻿@inherits UmbracoViewPage
+@using Umbraco.Web.Models
+
+@{
+  IPublishedContent RootPage = Model.Root();
+  IEnumerable<IPublishedContent> Pages = RootPage.Children();
+}
+
+<header class="bg-white shadow sticky top-0" x-data="{ open: false }">
+  <div class="container mx-auto px-4 flex flex-col">
+    <div class="flex h-16 items-center justify-between">
+      <div class="flex">
+        <a class="text-gray-700 text-lg font-medium" href="/" title="Back to homepage">Chime</a>
+      </div>
+      <div class="flex lg:hidden">
+        <button class="text-gray-700" @@click="open = true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="fill-current" width="24" height="24">
+            <path d="M4 5h16a1 1 0 010 2H4a1 1 0 110-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="hidden lg:flex">
+        <nav>
+          @if(Pages.Any())
+          {
+            foreach(IPublishedContent Page in Pages)
+            {
+              <a class="inline-block text-gray-700 px-4 hover:text-green-800" href="@Page.Url" title="@Page.Name">@Page.Name</a>
+            }
+          }
+        </nav>
+      </div>
+    </div>
+    
+    @if(Pages.Any())
+    {
+      <nav class="w-full divide-y lg:hidden border-t" x-show="open" @@click.away="open = false">
+        @foreach(IPublishedContent Page in Pages)
+        {
+          <a class="block text-gray-700 py-4" href="@Page.Url">@Page.Name</a>
+        }
+      </nav>
+    }
+  </nav>
+</header>
