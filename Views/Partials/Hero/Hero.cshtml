@@ -1,0 +1,22 @@
+@inherits UmbracoViewPage
+@using Umbraco.Web.Models
+
+@{
+  string HeroTitle = Model.Value<string>("heroTitle");
+  string HeroSubtitle = Model.Value<string>("heroSubtitle");
+}
+
+
+@if(!String.IsNullOrEmpty(HeroTitle))
+{
+  <section class="bg-gray-100 mt-16 lg:mt-0">
+    <div class="container mx-auto max-w-screen-md px-4 h-screen-50 flex items-center flex-col justify-center">
+      <span class="text-3xl text-green-700 font-medium leading-snug">@HeroTitle</span>
+      
+      @if(!String.IsNullOrEmpty(HeroSubtitle))
+      {
+        <span class="text-lg text-gray-600 mt-4">@HeroSubtitle</span>
+      }
+    </div>
+  </section>
+}
