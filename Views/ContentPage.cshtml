@@ -1,5 +1,12 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.ContentPage>
 @using ContentModels = Umbraco.Web.PublishedModels;
 @{
-	Layout = null;
+	Layout = "Master.cshtml";
 }
+
+<div class="container mx-auto px-4 max-w-screen-md my-12 lg:my-16">
+  <h1 class="text-gray-700 text-3xl font-medium mb-3">@Model.Name</h1>
+  <div class="content-wrapper text-gray-700">
+    @Model.Value("bodyText")
+  </div>
+</div>

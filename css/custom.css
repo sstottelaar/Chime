@@ -1,3 +1,12 @@
 .h-screen-50 {
   height: 50vh;
 }
+
+/**
+Text styles
+Note: since the CDN version of Tailwind is used, we can't use the @ directives unfortunately
+**/
+.container .content-wrapper p {
+  margin-bottom: 1.25rem;
+  line-height: 1.625;
+}

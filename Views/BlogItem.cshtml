@@ -1,0 +1,48 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.BlogItem>
+@using ContentModels = Umbraco.Web.PublishedModels;
+@using Umbraco.Core.Models.Membership;
+@using Umbraco.Core.Services;
+
+@{
+	Layout = "Master.cshtml";
+  IEnumerable<string> BlogTags = Model.Value<IEnumerable<string>>("blogTags");
+  IPublishedContent ParentPage = Model.Parent;
+  IUserService us = Services.UserService;
+  string AuthorAvatar = us.GetUserById(Model.WriterId)?.Avatar;
+}
+
+<div class="container mx-auto px-4 max-w-screen-md my-12 lg:my-16">
+  <div class="mb-4 space-x-1">
+  @foreach(string Tag in BlogTags)
+  {
+    <span class="text-xs inline-block bg-gray-200 text-gray-500 rounded py-1 px-2">@Tag</span>
+  }
+  </div>
+
+  <h1 class="text-gray-700 text-3xl font-medium mb-3">@Model.Name</h1>
+
+  <div class="content-wrapper text-gray-700">
+    @Model.Value("bodyText")
+  </div>
+
+  <hr class="my-8">
+
+  <div class="flex my-4">
+    @if(!string.IsNullOrEmpty(AuthorAvatar))
+    {
+      <div class="mr-4">
+        <img src="/media/@AuthorAvatar?width=50" alt="@Model.WriterName" class="inline-block rounded-full border">
+      </div>
+    }
+    <div class="flex justify-center flex-col">      
+      <span class="text-gray-700 font-medium">@Model.WriterName</span>
+      <span class="text-gray-600 text-sm">Published @Model.CreateDate.ToString("dd MMM yyyy")</span>
+    </div>
+  </div>
+
+  <a href="@ParentPage.Url" class="text-gray-500 inline-flex flex-initial items-center">
+    <svg xmlns="http://www.w3.org/2000/svg"class="fill-current" width="16" height="16" viewBox="0 0 24 24"><path d="M5.41 11H21a1 1 0 0 1 0 2H5.41l5.3 5.3a1 1 0 0 1-1.42 1.4l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 0 1 1.42 1.4L5.4 11z"/></svg>
+    <span class="ml-2">Back to overview</span>
+  </a>
+
+</div>

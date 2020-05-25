@@ -3,14 +3,16 @@
 
 @{
   IPublishedContent RootPage = Model.Root();
-  IEnumerable<IPublishedContent> Pages = RootPage.Children();
+  IEnumerable<IPublishedContent> Pages = RootPage.Children().Where(x => x.IsVisible());
+  IPublishedContent SettingsPage = Umbraco.Content(1079);
+  string WebsiteName = SettingsPage?.Value<string>("settingsWebsiteName");
 }
 
 <header class="bg-white shadow fixed w-full lg:sticky top-0 z-50" x-data="{ open: false }">
   <div class="container mx-auto px-4 flex flex-col">
     <div class="flex h-16 items-center justify-between">
       <div class="flex">
-        <a class="text-green-700 text-lg font-medium" href="/" title="Back to homepage">Chime</a>
+        <a class="text-green-700 text-lg font-medium" href="/" title="Back to homepage">@WebsiteName</a>
       </div>
       <div class="flex lg:hidden">
         <button class="text-gray-600" @@click="open = true">
@@ -25,7 +27,7 @@
           {
             foreach(IPublishedContent Page in Pages)
             {
-              <a class="inline-block text-gray-600 px-4 hover:text-green-800" href="@Page.Url" title="@Page.Name">@Page.Name</a>
+              <a class="inline-block text-gray-600 px-4 hover:text-green-800 @(Page.IsAncestorOrSelf(Model) ? "text-green-800 font-medium" : null)" href="@Page.Url" title="@Page.Name">@Page.Name</a>
             }
           }
         </nav>
@@ -42,7 +44,7 @@
       <nav class="w-full divide-y lg:hidden border-t" x-show="open" @@click.away="open = false">
         @foreach(IPublishedContent Page in Pages)
         {
-          <a class="block text-gray-600 py-4" href="@Page.Url">@Page.Name</a>
+          <a class="block text-gray-600 py-4 @(Page.IsAncestorOrSelf(Model) ? "text-green-800 font-medium" : null)" href="@Page.Url">@Page.Name</a>
         }
       </nav>
     }

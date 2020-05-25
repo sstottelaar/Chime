@@ -1,0 +1,11 @@
+@inherits Umbraco.Web.Mvc.UmbracoViewPage
+@{
+	Layout = null;
+  IPublishedContent SettingsPage = Umbraco.Content(1079);
+  string WebsiteName = SettingsPage?.Value<string>("settingsWebsiteName");
+  string CopyrightText = SettingsPage?.Value<string>("settingsCopyrightText");
+}
+
+<footer class="bg-gray-200 h-12 flex items-center justify-center">
+  <span class="text-sm text-gray-500">@CopyrightText</span>
+</footer>
