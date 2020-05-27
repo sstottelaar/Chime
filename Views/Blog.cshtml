@@ -1,19 +1,66 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.BlogOverview>
 @using ContentModels = Umbraco.Web.PublishedModels;
+@using Umbraco.Core.Models.Membership;
+@using Umbraco.Core.Services;
 
 @{
 	Layout = "Master.cshtml";
-  IEnumerable<BlogItem> BlogItems = Model.Children().Where(x => x.IsVisible());
-  
+  IEnumerable<IPublishedContent> BlogItems = Model.Children().Where(x => x.IsVisible());  
+  IUserService us = Services.UserService;  
 }
 
+<!-- Blog title -->
 <div class="container mx-auto px-4 max-w-screen-md my-12 lg:my-16">
   <h1 class="text-gray-700 text-3xl font-medium mb-2 text-center">@Model.Value("blogTitle")</h1>
   <p class="text-gray-600 text-lg text-center">@Model.Value("teaserText")</p>
+</div>
 
-  <div class="grid grid-cols-3 gap-6">
-    <div class="shadow-lg">
+<!-- Blog items -->
+<div class="container mx-auto px-4 my-12 lg:my-16">
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+    @foreach(IPublishedContent BlogItem in BlogItems)
+    {      
+      IEnumerable<string> BlogTags = BlogItem.Value<IEnumerable<string>>("blogTags");
+      string AuthorAvatar = us.GetUserById(BlogItem.WriterId)?.Avatar;
 
+      <a href="@BlogItem.Url" title="Read @BlogItem.Name" class="">
+        <div class="shadow-lg rounded-md">
+          <div class="p-6">
+            <div class="space-x-4">
+              @foreach(var Tag in BlogTags)
+              {
+                <span class="text-xs inline-block text-green-500 font-medium capitalize">@Tag</span>
+              }
+            </div>
+
+            <span class="text-gray-700 font-medium block mt-3">@BlogItem.Name</span>
+
+            <p class="mt-2 text-gray-600">@BlogItem.Value("blogTeaserText")</p>
+
+            <div class="flex mt-6">
+              @if(!string.IsNullOrEmpty(AuthorAvatar))
+              {
+                <div class="mr-4">
+                  <img src="/media/@AuthorAvatar?width=50" alt="@Model.WriterName" class="inline-block rounded-full border">
+                </div>
+              }
+              <div class="flex justify-center flex-col">      
+                <span class="text-gray-700 font-medium">@Model.WriterName</span>
+                <span class="text-gray-600 text-sm">@Model.CreateDate.ToString("MMM dd, yyyy")</span>
+              </div>
+            </div>    
+          </div>  
+        </div>
+      </a>
+    }
+  </div>
+</div>
+
+<!-- Blog CTA -->
+<div class="bg-gray-100 py-12 lg:py-16">
+  <div class="container mx-auto px-4 max-w-screen-md">
+    <div>
+      <h2>Want to stay in the loop?</h2>
     </div>
   </div>
 </div>
