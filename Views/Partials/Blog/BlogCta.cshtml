@@ -1,0 +1,28 @@
+@inherits Umbraco.Web.Mvc.UmbracoViewPage
+
+<!-- Blog CTA -->
+<div class="bg-gray-100 py-12 lg:py-16" x-data="newsletterSignup()">
+  <div class="container mx-auto px-4 max-w-screen-md">
+    <div class="flex items-center flex-col">
+      <h2 class="text-green-700 text-xl font-medium mb-2 text-center">@Umbraco.GetDictionaryValue("Blog.CTA.Title")</h2>
+      <p class="text-gray-600 text-lg mb-4 text-center">@Umbraco.GetDictionaryValue("Blog.CTA.Text")</p>
+      <form action="POST" id="newsletterSignup" class="w-full flex justify-center">
+        <input x-model="email" type="email" required class="text-gray-600 shadow rounded-l inline-block w-100 lg:w-1/2 p-2" placeholder="Your email">
+        <button @@click.prevent="register()" class="shadow bg-green-600 hover:bg-green-700 text-white rounded-r px-4 inline-block">@Umbraco.GetDictionaryValue("Blog.CTA.Button")</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function newsletterSignup() {
+  return {
+    email: '',
+    register() {
+      if(document.getElementById('newsletterSignup').reportValidity()) {
+        alert(`Implement API, ${this.email} just subscribed!`)
+      }
+    }
+  }
+}
+</script>

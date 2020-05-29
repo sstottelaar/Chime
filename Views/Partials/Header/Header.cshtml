@@ -31,11 +31,28 @@
             }
           }
         </nav>
-        <button class="text-gray-600 mx-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewbox="0 0 24 24">
-            <path d="M16.32 14.9l5.39 5.4a1 1 0 01-1.42 1.4l-5.38-5.38a8 8 0 111.41-1.41zM10 16a6 6 0 100-12 6 6 0 000 12z"/>
-          </svg>
-        </button>
+        <div class="flex items-center" x-data="searchModal()">
+          <button @@click="toggleSearch()" x-on:keydown.escape="toggleSearch()" class="text-gray-600 mx-4" id="searchToggleButton">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewbox="0 0 24 24">
+              <path d="M16.32 14.9l5.39 5.4a1 1 0 01-1.42 1.4l-5.38-5.38a8 8 0 111.41-1.41zM10 16a6 6 0 100-12 6 6 0 000 12z"/>
+            </svg>
+          </button>
+          <div x-show.transition.duration.400ms="isOpen()" class="fixed top-0 left-0 w-screen h-screen z-40 flex items-center flex-col justify-center px-8" id="searchModal">
+            <div class="w-full h-full z-40 absolute top-0 bg-gray-100 opacity-75" @@click="toggleSearch()"></div>
+            <div class="bg-white shadow-xl rounded-lg p-12 relative z-50 w-full lg:w-1/2">
+              <div class="flex justify-between">
+                <span class="text-gray-700 text-2xl font-medium">Search</span>
+                <button @@click="toggleSearch()" class="text-gray-600 uppercase text-sm">
+                  Close
+                </button>
+              </div>
+              <form methopd="POST" action="/search" class="flex mt-4">
+                <input type="text" class="inline-block p-2 text-gray-600 bg-transparent border border-gray-300 w-full rounded-l" id="searchQuery" name="query">
+                <button class="bg-green-600 hover:bg-green-700 text-white rounded-r px-4 inline-block">Search</button>                
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -50,3 +67,17 @@
     }
   </nav>
 </header>
+
+<script>
+  function searchModal() {
+    return {
+      showSearch: false,
+      toggleSearch() {
+        this.showSearch = !this.showSearch
+      },
+      isOpen() {
+        return this.showSearch === true
+      }
+    }
+  }
+</script>
