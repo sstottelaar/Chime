@@ -1,0 +1,79 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.SearchResults>
+@using Umbraco.Examine
+@using ContentModels = Umbraco.Web.PublishedModels;
+
+@{
+  Layout = "Master.cshtml";
+  var searchTerm = string.Empty;
+  searchTerm = string.IsNullOrEmpty(Request["query"]) ? string.Empty : Request["query"];
+  var searchFields = new[] { "nodeName", "bodyText", "blogTeaserText", "blogTags", "herotitle", "heroSubtitle"};
+}
+
+<div class="container mx-auto px-4 max-w-screen-md my-12 lg:my-16">
+
+  <h1 class="text-gray-700 text-3xl font-medium">Search results</h1>
+
+  <form methopd="POST" action="/search" class="flex mt-4">
+    <input type="text" class="inline-block py-2 px-3 text-gray-600 bg-transparent border border-gray-300 w-full rounded-l outline-none shadow" value="@searchTerm" placeholder="@Umbraco.GetDictionaryValue("Search.Modal.Placeholder")" id="searchQuery" name="query">
+    <button class="bg-green-600 hover:bg-green-700 text-white rounded-r px-4 inline-block outline-none shadow">
+      @Umbraco.GetDictionaryValue("Search.Modal.Button")
+    </button>                
+  </form>
+
+  @{
+    if (searchTerm == string.Empty)
+    {
+        <div class="flex w-full bg-gray-100 p-5 rounded-md shadow items-center mt-8">
+          <svg class="text-orange-400 w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+          <p class="ml-3 text-gray-600">No search term entered.</p>
+        </div>
+    }
+    else
+    {
+      if(ExamineManager.Instance.TryGetIndex("ExternalIndex", out var index))
+      {
+        var searcher = index.GetSearcher();
+        var results = searcher.CreateQuery("content").GroupedOr(searchFields, searchTerm).Execute();
+
+        if (results.Any())
+        {
+
+          <div class="mt-8">
+            <p class="text-gray-600">
+              Found @results.Count() result(s) for <span class="font-medium">@searchTerm</span>
+            </p>
+          </div>
+
+          <div class="border rounded-md divide-y mt-4 shadow">
+            @foreach (var result in results)
+            {
+              var nodeRef = Umbraco.Content(result.Id);
+
+              <a href="@nodeRef.Url" title="@nodeRef.Name" class="flex justify-between items-center py-3 px-4 hover:bg-gray-100">
+                <div class="flex flex-col">
+                  @result.Score
+                  <span class="text-gray-600 font-medium">
+                    @nodeRef.Name
+                  </span>
+                  <span class="text-green-500 text-xs mt-1">
+                    @nodeRef.Url
+                  </span>
+                </div>
+                <svg class="text-gray-500 w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </a>
+            }
+          </div>
+        }
+        else
+        {
+          <div class="flex w-full bg-gray-100 p-5 rounded-md shadow items-center mt-8">
+            <svg class="w-6 h-6 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+            <p class="ml-3 text-gray-600">No results found, try again.</p>
+          </div>
+        }
+      }
+    }
+  }
+</div>
