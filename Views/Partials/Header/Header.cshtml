@@ -39,16 +39,19 @@
           </button>
           <div x-show.transition.duration.400ms="isOpen()" class="fixed top-0 left-0 w-screen h-screen z-40 flex items-center flex-col justify-center px-8" id="searchModal">
             <div class="w-full h-full z-40 absolute top-0 bg-gray-100 opacity-75" @@click="toggleSearch()"></div>
-            <div class="bg-white shadow-xl rounded-lg p-12 relative z-50 w-full lg:w-1/2">
+            <div class="bg-white shadow-xl rounded-lg p-12 relative z-50 w-1/2">
               <div class="flex justify-between">
                 <span class="text-gray-700 text-2xl font-medium">Search</span>
-                <button @@click="toggleSearch()" class="text-gray-600 uppercase text-sm">
-                  Close
+                <button @@click="toggleSearch()" class="text-green-600 uppercase text-sm">
+                  <svg width="24" height="24" class="stroke-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 18L18 6M6 6L18 18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </button>
               </div>
+              <p class="mt-4 text-gray-600">Looking for something? Try by searching for it!</p>
               <form methopd="POST" action="/search" class="flex mt-4">
-                <input type="text" class="inline-block p-2 text-gray-600 bg-transparent border border-gray-300 w-full rounded-l" id="searchQuery" name="query">
-                <button class="bg-green-600 hover:bg-green-700 text-white rounded-r px-4 inline-block">Search</button>                
+                <input type="text" class="inline-block p-2 text-gray-600 bg-transparent border border-gray-300 w-full rounded-l outline-none shadow" id="searchQuery" name="query">
+                <button class="bg-green-600 hover:bg-green-700 text-white rounded-r px-4 inline-block outline-none shadow">Search</button>                
               </form>
             </div>
           </div>
