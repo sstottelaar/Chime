@@ -1,0 +1,19 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.ErrorPage>
+@using ContentModels = Umbraco.Web.PublishedModels;
+
+@{
+	Layout = "Master.cshtml";
+}
+
+<div class="container mx-auto px-4 max-w-screen-md my-12 lg:my-16">
+  <div class="p-12 bg-gray-100 rounded-lg flex items-start">
+    <svg class="text-orange-500 fill-current w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+    </svg>
+    <div class="ml-8">
+      <h1 class="text-gray-700 text-2xl font-medium">@Umbraco.GetDictionaryValue("ErrorPage.Title")</h1>
+      <p class="text-gray-600 mt-2">@Umbraco.GetDictionaryValue("ErrorPage.Text")</p>
+    </div>
+  </div>
+</div>
+
