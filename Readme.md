@@ -1,4 +1,4 @@
-# 🍃 Chime - Umbraco Starter Kit
+# Chime - Umbraco Starter Kit
 
 Chime is an opinionated Umbraco Starter Kit based on Tailwind CSS. It is intended to use as a starting point for new Umbraco projects that want to use Tailwind CSS.
 
@@ -29,6 +29,7 @@ Almost everything you see is modular. I've used partial templates to chop up pag
 
 - [x] Blog overview and detail page
 - [x] Basic search functionality
+- [x] Basic content page
 - [ ] Home page
 - [ ] Contact page
 - [ ] Proprietary social media meta tags
